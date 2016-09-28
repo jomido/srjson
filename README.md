@@ -2,12 +2,12 @@
     !
    .-.
  __|=|__
-(_/`-`\_)
-//\___/\\
+(_/`-`\_)   This is Sir Json.
+//\___/\\   Or Senior Json.
 <>/   \<>
- \|_._|/
+ \|_._|/    I can't decide.   
   <_I_>
-   |||
+   |||      Either way, he's a fine fellow.
   /_|_\
  sr json
 ```
