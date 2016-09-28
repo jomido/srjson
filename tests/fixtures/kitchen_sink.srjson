@@ -1,0 +1,38 @@
+{
+    "to": "<#PROMPT>",
+    "kind": "prod",
+
+    "repos": {
+        "root": "/repos",
+        "server": "<repos.root>/<kind>_server",
+        "ui": "<repos.root>/ui",
+        "services": "<repos.root>/<kind>_services",
+        "apps": "<repos.root>/<kind>_apps"
+    },
+
+    "services_to": "<to>/server/services",
+    "apps_to": "<to>/server/apps",
+
+    "clones": [
+        {
+            "name": "server",
+            "from": "<repos.server>",
+            "to":   "<to>"
+        },
+        {
+            "name": "auth",
+            "from": "<repos.services>/<clones.1.name>",
+            "to":   "<services_to>/<clones.1.name>"
+        },
+        {
+            "name": "number_cruncher",
+            "from": "<repos.apps>/<clones.2.name>",
+            "to":   "<apps_to>/<clones.2.name>"
+        },
+        {
+            "name": "ui",
+            "from": "<repos.ui>",
+            "to":   "<apps_to>/<clones.2.name>/frontend/ui"
+        }
+    ]
+}
