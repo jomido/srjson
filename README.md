@@ -42,7 +42,7 @@ print (result)
 
 A tag is any part of a string value that is enclosed in angle brackets. The
 value within the tag is a lookup into the original json data. In the above
-example, <b> is a lookup into data['b']. Here's another example:
+example, \<b\> is a lookup into data['b']. Here's another example:
 
 ```python
 data = {
