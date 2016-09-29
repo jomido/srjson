@@ -10,6 +10,13 @@ def simple():
 
 
 @pytest.fixture(scope='module')
+def array():
+
+    with open('tests/fixtures/array.srjson', 'r') as f:
+        return f.read()
+
+
+@pytest.fixture(scope='module')
 def kitchen_sink():
 
     with open('tests/fixtures/kitchen_sink.srjson', 'r') as f:
@@ -20,5 +27,12 @@ def kitchen_sink():
 def cyclical():
 
     with open('tests/fixtures/cyclical.srjson', 'r') as f:
+        return f.read()
+
+
+@pytest.fixture(scope='module')
+def percent_delimiters():
+
+    with open('tests/fixtures/percent_delimiters.srjson', 'r') as f:
         return f.read()
 
