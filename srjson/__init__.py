@@ -1,1 +1,1 @@
-from srjson import srjson, main
+from srjson import SRJSON, srjson, main
