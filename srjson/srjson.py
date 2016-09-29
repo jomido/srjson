@@ -25,11 +25,12 @@ def is_integer(s):
 
 class SRJSON(object):
 
-    def __init__(self, resolver=None):
+    def __init__(self, resolver=None, delimiters=('<', '>')):
 
         self.install = {}
         self.memo = {}
         self.resolver = resolver or default_resolver
+        self.delimiters = delimiters
 
     def expand(self, s, parent_path=''):
 
@@ -37,7 +38,7 @@ class SRJSON(object):
             return self.memo[parent_path]
 
         e = []
-        tokens = tokenize(s)
+        tokens = tokenize(s, delimiters=self.delimiters)
 
         for token in tokens:
 

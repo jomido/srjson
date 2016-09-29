@@ -3,18 +3,19 @@
 from .tokens import Token
 
 
-def tokenize(s):
+def tokenize(s, delimiters):
 
     if not isinstance(s, basestring):
         raise Exception("Cannot parse a non-string value: {}: {}".format(type(s), s))
 
+    start, stop = delimiters
     tokens = []
     value = ''
     state = Token.string
 
     for c in s:
 
-        if c == '<':
+        if c == start:
 
             if state == Token.string:
 
@@ -22,6 +23,16 @@ def tokenize(s):
 
                 if value:
                     tokens.append(Token(value, Token.string))
+
+                value = ''
+
+            # this elif block is here for the case where the start and stop
+            # delimiters are the same character
+            elif state == Token.lookup or state == Token.action:
+
+                tokens.append(Token(value, state))
+
+                state = Token.string
 
                 value = ''
 
@@ -35,7 +46,7 @@ def tokenize(s):
 
             continue
 
-        elif c == '>':
+        elif c == stop:
 
             if state == Token.lookup or state == Token.action:
 
