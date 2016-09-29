@@ -32,19 +32,20 @@ class SRJSON(object):
         self.resolver = resolver or default_resolver
         self.delimiters = delimiters
 
-    def expand(self, s, parent_path=''):
+    def expand(self, s, parent_path='', delimiters=None):
 
         if parent_path in self.memo:
             return self.memo[parent_path]
 
+        delimiters = delimiters or self.delimiters
         e = []
-        tokens = tokenize(s, delimiters=self.delimiters)
+        tokens = tokenize(s, delimiters=delimiters)
 
         for token in tokens:
 
             if token.type == Token.action:
                 value = self.resolver(token.value, parent_path)
-                e.append(self.expand(value, parent_path))
+                e.append(self.expand(value, parent_path, delimiters=delimiters))
 
             elif token.type == Token.lookup:
 
@@ -75,7 +76,9 @@ class SRJSON(object):
                     value = '|MISSING:{}|'.format('.'.join(path))
                     e.append(value)
                 else:
-                    e.append(self.expand(str(value), '.'.join(path)))
+                    e.append(self.expand(
+                        str(value), '.'.join(path), delimiters=delimiters
+                    ))
 
             else:
 
@@ -87,7 +90,7 @@ class SRJSON(object):
 
         return result
 
-    def build(self, o, path=None):
+    def build(self, o, path=None, delimiters=None):
 
         if isinstance(o, dict):
 
@@ -100,7 +103,7 @@ class SRJSON(object):
                 else:
                     p = '.'.join([path, k])
 
-                d[k] = self.build(v, p)
+                d[k] = self.build(v, p, delimiters=delimiters)
 
             return d
 
@@ -117,18 +120,18 @@ class SRJSON(object):
                 else:
                     path = '.'.join([path, str(i)])
 
-                l.append(self.build(e, path))
+                l.append(self.build(e, path, delimiters=delimiters))
 
             return l
 
         elif isinstance(o, basestring):
 
-            return self.expand(o, path)
+            return self.expand(o, path, delimiters=delimiters)
 
         else:
             return o
 
-    def loads(self, raw, memo=None, resolver=None):
+    def loads(self, raw, memo=None, resolver=None, delimiters=None):
 
         data = json.loads(raw)
 
@@ -141,7 +144,7 @@ class SRJSON(object):
         old_resolver = self.resolver
         self.resolver = resolver
 
-        result = self.build(data)
+        result = self.build(data, delimiters=delimiters)
 
         self.resolver = old_resolver
 
@@ -151,9 +154,9 @@ class SRJSON(object):
 srjson = SRJSON()
 
 
-def loads(raw, memo=None):
+def loads(raw, **kwargs):
 
-    return srjson.loads(raw, memo)
+    return srjson.loads(raw, **kwargs)
 
 
 def main():
