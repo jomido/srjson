@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from srjson import srjson
+from srjson import srjson, SRJSON
 
 
 def hasher(d):
@@ -20,6 +20,24 @@ def test_simple(simple):
     }
 
     result = srjson.loads(simple)
+
+    assert hasher(result) == hasher(expected)
+
+
+def test_array(array):
+
+    expected = [
+        {
+            'a': 'foo/bar',
+            'b': 'foo'
+        },
+        {
+            'a': 'qux/baz',
+            'b': 'qux'
+        }
+    ]
+
+    result = srjson.loads(array)
 
     assert hasher(result) == hasher(expected)
 
@@ -77,5 +95,19 @@ def test_cyclical(cyclical):
     expected = {}
 
     result = srjson.loads(cyclical)
+
+    assert hasher(result) == hasher(expected)
+
+
+def test_custom_delimiters(percent_delimiters):
+
+    _srjson = SRJSON(delimiters=('%', '%'))
+
+    expected = {
+        'a': 'foo/bar',
+        'b': 'foo'
+    }
+
+    result = _srjson.loads(percent_delimiters)
 
     assert hasher(result) == hasher(expected)
