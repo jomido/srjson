@@ -111,3 +111,15 @@ def test_custom_delimiters(percent_delimiters):
     result = _srjson.loads(percent_delimiters)
 
     assert hasher(result) == hasher(expected)
+
+
+def test_custom_delimiters_via_loads(percent_delimiters):
+
+    expected = {
+        'a': 'foo/bar',
+        'b': 'foo'
+    }
+
+    result = srjson.loads(percent_delimiters, delimiters=('%', '%'))
+
+    assert hasher(result) == hasher(expected)
