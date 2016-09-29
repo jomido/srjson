@@ -5,7 +5,7 @@
 (_/`-`\_)   This is Sir Json.
 //\___/\\   Or Senior Json.
 <>/   \<>
- \|_._|/    I can't decide.   
+ \|_._|/    I can't decide.
   <_I_>
    |||      Either way, he's a fine fellow.
   /_|_\
@@ -20,7 +20,7 @@
 
 ## tl;dr
 
-srjson is json that incorporates self-referential tags. A small example:
+srjson is json with self-referential tags. A small example:
 
 ```python
 data = {
@@ -38,7 +38,7 @@ print (result)
 # }
 ```
 
-## on;wr (oh, neat, wanna' read)
+## ok;ib (ok, I'll bite)
 
 A tag is any part of a string value that is enclosed in angle brackets. The
 value within the tag is a lookup into the original json data. In the above
@@ -64,6 +64,26 @@ print (result)
 #         "d": "baz"
 #     }
 # }
+```
+
+You can use custom delimiters, rather than angle brackets. To use '%' instead:
+
+```python
+data = {
+    "a": "%b%/bar",
+    "b": "foo"
+}
+
+result = srjson.loads(data, delimiters=('%', '%'))
+
+print (result)
+
+# {
+#     "a": "foo/bar",
+#     "b": "foo"
+# }
+
+# or: srjson = SRJSON(delimiters=('%', '%'))
 ```
 
 If a tag lookup doesn't reference a string value, then an error value is
@@ -238,3 +258,15 @@ srjson.loads(data, memo=memo)
 #     }
 # }
 ```
+
+## Considerations
+
+ * srjson must always be valid json
+
+## TODO
+
+ * investigate [jsonpath_rw]() for replacing parser and path expressions
+  * speed
+  * simplicity
+ * refactor resolvers so they are single functions per {action: resolver}
+ * refactor SRJSON method args into generic **kwargs
